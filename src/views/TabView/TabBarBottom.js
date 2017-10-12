@@ -56,6 +56,7 @@ export default class TabBarBottom extends PureComponent<
     inactiveBackgroundColor: 'transparent',
     showLabel: true,
     showIcon: true,
+    allowFontScaling: true,
   };
 
   props: Props;
@@ -68,6 +69,7 @@ export default class TabBarBottom extends PureComponent<
       inactiveTintColor,
       labelStyle,
       showLabel,
+      allowFontScaling,
     } = this.props;
     if (showLabel === false) {
       return null;
@@ -89,7 +91,10 @@ export default class TabBarBottom extends PureComponent<
     const label = this.props.getLabel({ ...scene, tintColor });
     if (typeof label === 'string') {
       return (
-        <Animated.Text style={[styles.label, { color }, labelStyle]}>
+        <Animated.Text
+          style={[styles.label, { color }, labelStyle]}
+          allowFontScaling={allowFontScaling}
+        >
           {label}
         </Animated.Text>
       );
