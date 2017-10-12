@@ -21,6 +21,7 @@ type DefaultProps = {
   showIcon: boolean,
   showLabel: boolean,
   upperCaseLabel: boolean,
+  allowFontScaling: boolean,
 };
 
 type Props = {
@@ -29,6 +30,7 @@ type Props = {
   showIcon: boolean,
   showLabel: boolean,
   upperCaseLabel: boolean,
+  allowFontScaling: boolean,
   position: Animated.Value,
   navigation: NavigationScreenProp<NavigationState, NavigationAction>,
   jumpToIndex: (index: number) => void,
@@ -46,7 +48,7 @@ export default class TabBarTop extends PureComponent<
   Props,
   void
 > {
-  static defaultProps = {
+  static defaultProps: DefaultProps = {
     activeTintColor: '#fff',
     inactiveTintColor: '#fff',
     showIcon: false,
