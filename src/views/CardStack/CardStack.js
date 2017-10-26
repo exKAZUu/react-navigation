@@ -18,6 +18,7 @@ import Header from '../Header/Header';
 import NavigationActions from '../../NavigationActions';
 import addNavigationHelpers from '../../addNavigationHelpers';
 import SceneView from '../SceneView';
+import StaticContainer from '../StaticContainer';
 
 import type {
   NavigationAction,
@@ -371,7 +372,9 @@ class CardStack extends Component {
     return (
       <View {...handlers} style={containerStyle}>
         <View style={styles.scenes}>
-          {scenes.map((s: *) => this._renderCard(s))}
+          {scenes.map((s: *, index: number) =>
+            this._renderCard(s, index === scenes.length - 1)
+          )}
         </View>
         {floatingHeader}
       </View>
@@ -430,7 +433,7 @@ class CardStack extends Component {
     );
   };
 
-  _renderCard = (scene: NavigationScene): React.Element<*> => {
+  _renderCard = (scene: NavigationScene, active: boolean): React.Element<*> => {
     const { screenInterpolator } = this._getTransitionConfig();
     const style =
       screenInterpolator && screenInterpolator({ ...this.props, scene });
@@ -440,14 +443,16 @@ class CardStack extends Component {
     );
 
     return (
-      <Card
-        {...this.props}
-        key={`card_${scene.key}`}
-        style={[style, this.props.cardStyle]}
-        scene={scene}
-      >
-        {this._renderInnerScene(SceneComponent, scene)}
-      </Card>
+      <StaticContainer shouldUpdate={active}>
+        <Card
+          {...this.props}
+          key={`card_${scene.key}`}
+          style={[style, this.props.cardStyle]}
+          scene={scene}
+        >
+          {this._renderInnerScene(SceneComponent, scene)}
+        </Card>
+      </StaticContainer>
     );
   };
 }
