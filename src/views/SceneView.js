@@ -17,6 +17,20 @@ type Props = {
   scene?: NavigationScene,
 };
 
+class StaticContainer extends React.Component {
+  shouldComponentUpdate(nextProps: Object) {
+    return !!nextProps.shouldUpdate;
+  }
+
+  render() {
+    const child = this.props.children;
+    if (child === null || child === false) {
+      return null;
+    }
+    return React.Children.only(child);
+  }
+}
+
 export default class SceneView extends React.PureComponent<Props> {
   static childContextTypes = {
     navigation: propTypes.object.isRequired,
@@ -31,18 +45,10 @@ export default class SceneView extends React.PureComponent<Props> {
   render() {
     const { screenProps, navigation, component: Component, scene } = this.props;
 
-    const comp: any = (
-      <Component screenProps={screenProps} navigation={navigation} />
+    return (
+      <StaticContainer shouldUpdate={scene.isActive}>
+        <Component screenProps={screenProps} navigation={navigation} />
+      </StaticContainer>
     );
-    if (scene) {
-      const originalMethod = comp.type.prototype.shouldComponentUpdate;
-      comp.type.prototype.shouldComponentUpdate = function(...args: [*]) {
-        return (
-          scene.isActive &&
-          (!originalMethod || originalMethod.apply(this, args))
-        );
-      };
-    }
-    return comp;
   }
 }
